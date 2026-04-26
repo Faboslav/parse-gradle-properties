@@ -1,0 +1,27 @@
+name: Parse Gradle Properties
+description: Parse gradle.properties into GitHub Actions outputs
+author: Faboslav
+
+branding:
+  icon: file-text
+  color: green
+
+inputs:
+  file:
+    description: Path to gradle.properties file
+    required: false
+    default: gradle.properties
+  ignore-keys:
+    description: Comma-separated prefixes to ignore
+    required: false
+    default: org.gradle
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        chmod +x "${{ github.action_path }}/parseGradleProperties.sh"
+        "${{ github.action_path }}/parseGradleProperties.sh" \
+          "${{ inputs.file }}" \
+          "${{ inputs.ignore-keys }}" >> "$GITHUB_OUTPUT"
