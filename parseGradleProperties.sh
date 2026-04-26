@@ -1,10 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-file=${1:-gradle.properties}
+files=${1:-gradle.properties}
 ignore_keys=${2:-org.gradle}
 
 parse_properties_file() {
+	local file=$1
+
 	if [[ ! -f "$file" ]]; then
 		echo "Properties file not found: $file" >&2
 		exit 1
@@ -27,4 +29,8 @@ parse_properties_file() {
 	done < "$file"
 }
 
-parse_properties_file
+while IFS= read -r file; do
+	file=$(echo "$file" | awk '{$1=$1;print}')
+	[[ -z "$file" ]] && continue
+	parse_properties_file "$file"
+done <<< "$(echo "$files" | tr ',' '\n')"

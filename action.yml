@@ -7,12 +7,12 @@ branding:
   color: green
 
 inputs:
-  file:
-    description: Path to gradle.properties file
+  files:
+    description: Paths to gradle.properties files, separated by commas or new lines. Later files override earlier outputs.
     required: false
     default: gradle.properties
   ignore-keys:
-    description: Comma-separated prefixes to ignore
+    description: Comma-separated keys or prefixes to ignore
     required: false
     default: org.gradle
 
@@ -23,5 +23,5 @@ runs:
       run: |
         chmod +x "${{ github.action_path }}/parseGradleProperties.sh"
         "${{ github.action_path }}/parseGradleProperties.sh" \
-          "${{ inputs.file }}" \
+          "${{ inputs.files }}" \
           "${{ inputs.ignore-keys }}" >> "$GITHUB_OUTPUT"
